@@ -1,15 +1,38 @@
-;; Consider an implementation of binary trees with Scheme lists,
-;; as in the following example:
 
-(define T
-	'(13
-		(5
-			(1 () ())
-	    (8 ()
-				(9 () ())))
-		(22
-			(17 () ())
-			(25 () ()))))
+(define (subst x y L)
+	(if (null? L)
+		L
+		(if (equal? (car L) x) ;; if first character equals x
+      (cons y (subst x y (cdr L))) ;; then append the tail of L to the new list
+      (cons (car L) (subst x y (cdr L))) ;; else return first character
+    )
+  )
+)
+
+(define (len L)
+	(if (null? L)
+		0
+		(+ 1 (len (cdr L)))))
+
+
+(define (member? x L)
+	(cond
+		((null? L) #f)
+		((equal? x (car L)) #t)
+		(else (member? x (cdr L)))
+	)
+)
+
+;; in list L, take first element
+(define (all-different? L)
+	(if (null? L)
+		#t ;; if empty list just return true to stop recursion
+		(if (member? (car L) (cdr L)) ;; if first char is repeated in the tail
+      #f ;; then the list has non-unique elements
+      (all-different? (cdr L)) ;; else check the list without the first element
+    )
+  )
+)
 
 (define (left T)
 	(if (= (length T) 1) ;; if 1 elem in list this is a leaf
@@ -81,8 +104,3 @@
      (append (flatten (car L)) (flatten (cdr L))))
     (else (list L)))
 )
-
-
-;; I/O:
-;;   > (all-different? `(d a b z e a q))
-;;   Value: #f
