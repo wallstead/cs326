@@ -4,14 +4,13 @@ import java.awt.event.*;
 import javax.swing.event.*;
 import java.io.*;
 
-
-
 public class WindowApplication extends JFrame
 {
     protected DrawColor colorDrawn;
     protected MyColor[] colors = new MyColor[30]; // 30 is arbitrary
     protected int colorCount;
     protected JList listColors;
+    protected MyColor currentColor;
 
 
 	public static void main (String argv [])
@@ -21,9 +20,7 @@ public class WindowApplication extends JFrame
 
     public WindowApplication(String title)
     {
-
         super(title);
-
 
         try {
             readFile("input.txt");
@@ -36,11 +33,10 @@ public class WindowApplication extends JFrame
 		addWindowListener(new WindowDestroyer());
 
         colorDrawn = new DrawColor();
-        MyColor firstColor = colors[0];
 
+        MyColor firstColor = colors[0];
+        currentColor = colors[0];
         colorDrawn.paintColor = new Color(firstColor.red, firstColor.green, firstColor.blue);
-        listColors = new JList();
-		listColors.addListSelectionListener(new ListHandler());
 
 		getContentPane().setLayout(null); // row,col
 
@@ -51,9 +47,6 @@ public class WindowApplication extends JFrame
         listColors.setBounds(10+220+10, 10, 100, 250);
 
 		setVisible(true);
-
-        String colors[] = {"Red", "Green", "Blue"};
-		listColors.setListData(colors);
     }
 
     public void readFile(String filename) throws IOException
@@ -86,8 +79,11 @@ public class WindowApplication extends JFrame
 
         colorCount = colorCounter;
 
-        stream.close();
+        listColors = new JList();
+		listColors.addListSelectionListener(new ListHandler());
+		listColors.setListData(colors);
 
+        stream.close();
     }
 
     private class ListHandler implements ListSelectionListener
@@ -98,9 +94,10 @@ public class WindowApplication extends JFrame
             {
                 if ( !e.getValueIsAdjusting() )
                 {
-                int i = listColors.getSelectedIndex();
-                String s = (String) listColors.getSelectedValue();
-                System.out.println("Position " + i + " selected: " +s);
+                    int i = listColors.getSelectedIndex();
+                    MyColor chosenColor = (MyColor) listColors.getSelectedValue();
+                    colorDrawn.paintColor = new Color(chosenColor.red, chosenColor.green, chosenColor.blue);
+                    colorDrawn.repaint();
                 }
             }
         }
@@ -143,6 +140,11 @@ class MyColor {
         this.red = red;
         this.green = green;
         this.blue = blue;
+    }
+
+    public String toString()
+    {
+        return name;
     }
 }
 
