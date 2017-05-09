@@ -11,6 +11,15 @@ public class WindowApplication extends JFrame
     protected int colorCount;
     protected JList listColors;
     protected MyColor currentColor;
+    protected JTextField tfRed;
+	protected JTextField tfGreen;
+    protected JTextField tfBlue;
+    protected JButton redUp;
+	protected JButton redDown;
+    protected JButton greenUp;
+	protected JButton greenDown;
+    protected JButton blueUp;
+	protected JButton blueDown;
 
 
 	public static void main (String argv [])
@@ -33,18 +42,55 @@ public class WindowApplication extends JFrame
 		addWindowListener(new WindowDestroyer());
 
         colorDrawn = new DrawColor();
-
         MyColor firstColor = colors[0];
         currentColor = colors[0];
         colorDrawn.paintColor = new Color(firstColor.red, firstColor.green, firstColor.blue);
+
+        JLabel redLabel = new JLabel("Red:");
+        JLabel greenLabel = new JLabel("Green:");
+        JLabel blueLabel = new JLabel("Blue:");
+        tfRed = new JTextField(Integer.toString(firstColor.red));
+        tfGreen = new JTextField(Integer.toString(firstColor.green));
+        tfBlue = new JTextField(Integer.toString(firstColor.blue));
+        redUp = new JButton("+");
+        redDown = new JButton("-");
+        greenUp = new JButton("+");
+        greenDown = new JButton("-");
+        blueUp = new JButton("+");
+        blueDown = new JButton("-");
 
 		getContentPane().setLayout(null); // row,col
 
 		getContentPane().add(colorDrawn);
 		getContentPane().add(listColors);
+        getContentPane().add(redLabel);
+        getContentPane().add(greenLabel);
+        getContentPane().add(blueLabel);
+        getContentPane().add(tfRed);
+		getContentPane().add(tfGreen);
+        getContentPane().add(tfBlue);
+        getContentPane().add(redUp);
+        getContentPane().add(redDown);
+        getContentPane().add(greenUp);
+        getContentPane().add(greenDown);
+        getContentPane().add(blueUp);
+        getContentPane().add(blueDown);
 
         colorDrawn.setBounds(10, 10, 220, 100);
-        listColors.setBounds(10+220+10, 10, 100, 250);
+        listColors.setBounds(10+220+10, 10, 100, 260);
+        redLabel.setBounds(10, 115, 50, 25);
+        greenLabel.setBounds(10, 140, 50, 25);
+        blueLabel.setBounds(10, 165, 50, 25);
+        tfRed.setBounds(60, 115, 50, 25);
+        tfGreen.setBounds(60, 140, 50, 25);
+        tfBlue.setBounds(60, 165, 50, 25);
+        redDown.setBounds(110, 115, 65, 25);
+        redUp.setBounds(170, 115, 65, 25);
+        greenDown.setBounds(110, 140, 65, 25);
+        greenUp.setBounds(170, 140, 65, 25);
+        blueDown.setBounds(110, 165, 65, 25);
+        blueUp.setBounds(170, 165, 65, 25);
+
 
 		setVisible(true);
     }
@@ -74,7 +120,7 @@ public class WindowApplication extends JFrame
             MyColor color = new MyColor(colorName, red, green, blue);
             colors[colorCounter] = color; // will be at 0 index for first color
             colorCounter++;
-            System.out.println(colorName + " " + red + " " + blue + " " + green + colorCount);
+            System.out.println(colorName + " " + red + " " + blue + " " + green);
         }
 
         colorCount = colorCounter;
@@ -98,6 +144,9 @@ public class WindowApplication extends JFrame
                     MyColor chosenColor = (MyColor) listColors.getSelectedValue();
                     colorDrawn.paintColor = new Color(chosenColor.red, chosenColor.green, chosenColor.blue);
                     colorDrawn.repaint();
+                    tfRed.setText(Integer.toString(chosenColor.red));
+                    tfGreen.setText(Integer.toString(chosenColor.green));
+                    tfBlue.setText(Integer.toString(chosenColor.blue));
                 }
             }
         }
