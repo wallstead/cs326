@@ -11,6 +11,7 @@ public class WindowApplication extends JFrame
     protected int colorCount;
     protected JList listColors;
     protected MyColor currentColor;
+    protected MyColor modifiedColor; // where I will store unsaved colors
     protected JTextField tfRed;
 	protected JTextField tfGreen;
     protected JTextField tfBlue;
@@ -20,7 +21,6 @@ public class WindowApplication extends JFrame
 	protected JButton greenDown;
     protected JButton blueUp;
 	protected JButton blueDown;
-
 
 	public static void main (String argv [])
 	{
@@ -148,6 +148,11 @@ public class WindowApplication extends JFrame
             {
                 if ( !e.getValueIsAdjusting() )
                 {
+                    if (modifiedColor != null) {
+                        setTitle("Color Sampler");
+                        modifiedColor = null;
+                    }
+                    
                     int i = listColors.getSelectedIndex();
                     MyColor chosenColor = (MyColor) listColors.getSelectedValue();
                     colorDrawn.paintColor = new Color(chosenColor.red, chosenColor.green, chosenColor.blue);
@@ -176,7 +181,15 @@ public class WindowApplication extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
             /* rename window */
-            setTitle("Color Sampler*");
+
+
+            if (modifiedColor == null) {
+                setTitle("Color Sampler*");
+                modifiedColor = new MyColor(currentColor);
+                System.out.println("was null");
+            }
+
+            /* please look away as I copy and paste something which could have been abstracted */
 
 			if ( e.getSource() == redUp )
 			{
@@ -184,8 +197,8 @@ public class WindowApplication extends JFrame
                 int requestedValue = currentValue+5;
                 if (inRange(requestedValue)) {
                     tfRed.setText(Integer.toString(requestedValue));
-                    currentColor.red = requestedValue;
-                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    modifiedColor.red = requestedValue;
+                    colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
                     colorDrawn.repaint();
                 }
 			}
@@ -195,8 +208,8 @@ public class WindowApplication extends JFrame
                 int requestedValue = currentValue-5;
                 if (inRange(requestedValue)) {
                     tfRed.setText(Integer.toString(requestedValue));
-                    currentColor.red = requestedValue;
-                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    modifiedColor.red = requestedValue;
+                    colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == greenUp ) {
@@ -205,8 +218,8 @@ public class WindowApplication extends JFrame
                 int requestedValue = currentValue+5;
                 if (inRange(requestedValue)) {
                     tfGreen.setText(Integer.toString(requestedValue));
-                    currentColor.green = requestedValue;
-                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    modifiedColor.green = requestedValue;
+                    colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == greenDown ) {
@@ -215,8 +228,8 @@ public class WindowApplication extends JFrame
                 int requestedValue = currentValue-5;
                 if (inRange(requestedValue)) {
                     tfGreen.setText(Integer.toString(requestedValue));
-                    currentColor.green = requestedValue;
-                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    modifiedColor.green = requestedValue;
+                    colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == blueUp ) {
@@ -225,8 +238,8 @@ public class WindowApplication extends JFrame
                 int requestedValue = currentValue+5;
                 if (inRange(requestedValue)) {
                     tfBlue.setText(Integer.toString(requestedValue));
-                    currentColor.blue = requestedValue;
-                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    modifiedColor.blue = requestedValue;
+                    colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == blueDown ) {
@@ -235,8 +248,8 @@ public class WindowApplication extends JFrame
                 int requestedValue = currentValue-5;
                 if (inRange(requestedValue)) {
                     tfBlue.setText(Integer.toString(requestedValue));
-                    currentColor.blue = requestedValue;
-                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    modifiedColor.blue = requestedValue;
+                    colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
                     colorDrawn.repaint();
                 }
             }
@@ -266,6 +279,13 @@ class MyColor {
         this.red = red;
         this.green = green;
         this.blue = blue;
+    }
+
+    public MyColor(MyColor another) { // copy constructor
+        this.name = another.name;
+        this.red = another.red;
+        this.green = another.green;
+        this.blue = another.blue;
     }
 
     public String toString()
