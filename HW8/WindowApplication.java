@@ -34,8 +34,7 @@ public class WindowApplication extends JFrame
         try {
             readFile("input.txt");
         } catch (IOException e) {
-            // Do something here
-            System.out.println("Failed to read in colors");
+            System.out.println("Failed to read in colors: " + e);
         }
 
 		setBounds(100, 100, 350, 300);
@@ -50,14 +49,23 @@ public class WindowApplication extends JFrame
         JLabel greenLabel = new JLabel("Green:");
         JLabel blueLabel = new JLabel("Blue:");
         tfRed = new JTextField(Integer.toString(firstColor.red));
+        tfRed.setEditable(false); // project spec says only editable by buttons
         tfGreen = new JTextField(Integer.toString(firstColor.green));
+        tfGreen.setEditable(false);
         tfBlue = new JTextField(Integer.toString(firstColor.blue));
+        tfBlue.setEditable(false);
         redUp = new JButton("+");
+        redUp.addActionListener(new ActionHandler());
         redDown = new JButton("-");
+        redDown.addActionListener(new ActionHandler());
         greenUp = new JButton("+");
+        greenUp.addActionListener(new ActionHandler());
         greenDown = new JButton("-");
+        greenDown.addActionListener(new ActionHandler());
         blueUp = new JButton("+");
+        blueUp.addActionListener(new ActionHandler());
         blueDown = new JButton("-");
+        blueDown.addActionListener(new ActionHandler());
 
 		getContentPane().setLayout(null); // row,col
 
@@ -147,25 +155,94 @@ public class WindowApplication extends JFrame
                     tfRed.setText(Integer.toString(chosenColor.red));
                     tfGreen.setText(Integer.toString(chosenColor.green));
                     tfBlue.setText(Integer.toString(chosenColor.blue));
+                    currentColor = chosenColor;
+                    // System.out.println(currentColor);
                 }
             }
         }
 	}
 
-    // private class ActionHandler implements ActionListener
-	// {
-	// 	public void actionPerformed(ActionEvent e)
-	// 	{
-	// 		if ( e.getSource() == buttonDone )
-	// 		{
-	// 			String s1 = tfFirstName.getText();
-	// 			String s2 = tfLastName.getText();
-	// 			System.out.print("Full name: " + s1 + " " + s2);
-	// 		}
-	// 		else if ( e.getSource() == buttonCancel )
-	// 			System.out.print("You pressed the Cancel button.");
-	// 	}
-	// }
+    private class ActionHandler implements ActionListener
+	{
+
+        public boolean inRange(int val) {
+            if (val <= 255 && val >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+		public void actionPerformed(ActionEvent e)
+		{
+            /* rename window */
+            setTitle("Color Sampler*");
+
+			if ( e.getSource() == redUp )
+			{
+                int currentValue = Integer.parseInt(tfRed.getText());
+                int requestedValue = currentValue+5;
+                if (inRange(requestedValue)) {
+                    tfRed.setText(Integer.toString(requestedValue));
+                    currentColor.red = requestedValue;
+                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    colorDrawn.repaint();
+                }
+			}
+			else if ( e.getSource() == redDown ) {
+                // System.out.print("You pressed the Cancel button.");
+                int currentValue = Integer.parseInt(tfRed.getText());
+                int requestedValue = currentValue-5;
+                if (inRange(requestedValue)) {
+                    tfRed.setText(Integer.toString(requestedValue));
+                    currentColor.red = requestedValue;
+                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    colorDrawn.repaint();
+                }
+            } else if ( e.getSource() == greenUp ) {
+                // System.out.print("You pressed the Cancel button.");
+                int currentValue = Integer.parseInt(tfGreen.getText());
+                int requestedValue = currentValue+5;
+                if (inRange(requestedValue)) {
+                    tfGreen.setText(Integer.toString(requestedValue));
+                    currentColor.green = requestedValue;
+                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    colorDrawn.repaint();
+                }
+            } else if ( e.getSource() == greenDown ) {
+                // System.out.print("You pressed the Cancel button.");
+                int currentValue = Integer.parseInt(tfGreen.getText());
+                int requestedValue = currentValue-5;
+                if (inRange(requestedValue)) {
+                    tfGreen.setText(Integer.toString(requestedValue));
+                    currentColor.green = requestedValue;
+                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    colorDrawn.repaint();
+                }
+            } else if ( e.getSource() == blueUp ) {
+                // System.out.print("You pressed the Cancel button.");
+                int currentValue = Integer.parseInt(tfBlue.getText());
+                int requestedValue = currentValue+5;
+                if (inRange(requestedValue)) {
+                    tfBlue.setText(Integer.toString(requestedValue));
+                    currentColor.blue = requestedValue;
+                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    colorDrawn.repaint();
+                }
+            } else if ( e.getSource() == blueDown ) {
+                // System.out.print("You pressed the Cancel button.");
+                int currentValue = Integer.parseInt(tfBlue.getText());
+                int requestedValue = currentValue-5;
+                if (inRange(requestedValue)) {
+                    tfBlue.setText(Integer.toString(requestedValue));
+                    currentColor.blue = requestedValue;
+                    colorDrawn.paintColor = new Color(currentColor.red, currentColor.green, currentColor.blue);
+                    colorDrawn.repaint();
+                }
+            }
+
+		}
+	}
 
 	private class WindowDestroyer extends WindowAdapter
 	{
