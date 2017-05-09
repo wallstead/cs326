@@ -1,3 +1,6 @@
+% all code assumes we can use the available member function,
+% otherwise I would have rewritten the one given in class
+
 % 1-a: Write the rules for a predicate isSet(S), which succeeds if the list S is a set.
 isSet([]). % empty set is a set.
 isSet([_]). % single element set is a set.
@@ -10,14 +13,10 @@ subSet([H|T],S):- member(H,S), subSet(T,S). % is subset if the head is a member 
 union([],C,C). % set unioned with empty set is that set.
 union([H|T],S,C):- member(H,S), !, union(T,S,C). % if H of first set is member of second set, and union of T of first set and S is C
 union([H|T],S,[H|Ct]):- union(T,S,Ct).
-
-
 % 1-d: Write the rules for a predicate intersection(A,B,C), which succeeds if the intersection of sets A and B is the set C.
-intersection([],_,[]). % intersection of a set and an empty set is empty
-intersection(_,[],[]). % intersection of a set and an empty set is empty
-intersection(S,U,[H|T]):- member(H,S), member(H,U), intersection(S,U,T). /* NOT WORKING YETTTTTT */
-
-
+intersection([],_,[]).
+intersection([H|T],S,[H|Ct]) :- member(H,S), intersection(T,S,Ct).
+intersection([_|T],S,C) :- intersection(T,S,C).
 % 2: Write the rules for a predicate tally(E,L,N), which succeeds if N is the number of occurrences of element E in list L.
 tally(_,[],0). % empty list will not have occurrences of anything.
 tally(E,[E|T],N):- tally(E,T,X), N is 1+X. % if E matches the head of the list, increment N and go on down the rest.
@@ -31,5 +30,10 @@ subst(X,Y,[H|T],[I|U]):- I is H, subst(X,Y,T,U).% set I to H
 % 4: Write the rules for a predicate insert(X,L,L1), which succeeds if list L1 is identical to the sorted list L with X
 %    inserted at the correct place. Assume that L is already sorted.
 insert(X,[],[X]). % anything inserted into an empty list is a list of that one thing
-insert(X,[H|T],[I|U]):- X =< H, I is H, insert(X, T, U). % else if X is less than or equal to H, load H into new list and move on (dont insert)
-insert(X,[H|T],L2):- X > H, insert(X, T, [X|L2]).
+insert(X,[H|T],[H|U]):- X >= H, insert(X, T, U).
+insert(X,[H|T],[X|[H|T]]):- X < H.
+% 5: Write the rules for a predicate flatten(A,B), which succeeds if A is a list (possibly containing sublists),
+%    and B is a list containing all elements in A and its sublists, but all at the same level.
+flatten([], []).
+flatten([[]|Ls], R) :- flatten(Ls, R).
+flatten([[El|L1s]|Ls], [El|R]) :- flatten([L1s|Ls], R).
