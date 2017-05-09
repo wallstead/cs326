@@ -2,28 +2,26 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-import javax.swing.*;
-
-public class WindowApplication
+public class WindowApplication extends JFrame
 {
 	public static void main (String argv [])
 	{
-		JFrame frame = new JFrame("Window Application");
-		frame.setSize(350, 150);
-        frame.addWindowListener(new WindowDestroyer());
-		frame.setVisible(true);
+        new WindowApplication("Window Application");
 	}
-}
 
-class WindowDestroyer implements WindowListener
-{
-	public void windowClosing(WindowEvent e) {
-        System.exit(0);
+    public WindowApplication(String title)
+    {
+    	super(title);		// call constructor of base class
+    	setSize(350, 150);
+    	addWindowListener(new WindowDestroyer());
+    	setVisible(true);
     }
-	public void windowActivated(WindowEvent e) {}
-	public void windowClosed(WindowEvent e) {}
-	public void windowDeactivated(WindowEvent e) {}
-	public void windowDeiconified(WindowEvent e) {}
-	public void windowIconified(WindowEvent e) {}
-	public void windowOpened(WindowEvent e) {}
+
+	private class WindowDestroyer extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent e)
+		{
+			System.exit(0);
+		}
+	}
 }
