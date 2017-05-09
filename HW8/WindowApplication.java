@@ -21,6 +21,8 @@ public class WindowApplication extends JFrame
 	protected JButton greenDown;
     protected JButton blueUp;
 	protected JButton blueDown;
+    protected JButton save;
+    protected JButton reset;
 
 	public static void main (String argv [])
 	{
@@ -66,6 +68,10 @@ public class WindowApplication extends JFrame
         blueUp.addActionListener(new ActionHandler());
         blueDown = new JButton("-");
         blueDown.addActionListener(new ActionHandler());
+        save = new JButton("Save");
+        save.addActionListener(new ActionHandler());
+        reset = new JButton("Reset");
+        reset.addActionListener(new ActionHandler());
 
 		getContentPane().setLayout(null); // row,col
 
@@ -83,6 +89,8 @@ public class WindowApplication extends JFrame
         getContentPane().add(greenDown);
         getContentPane().add(blueUp);
         getContentPane().add(blueDown);
+        getContentPane().add(save);
+        getContentPane().add(reset);
 
         colorDrawn.setBounds(10, 10, 220, 100);
         listColors.setBounds(10+220+10, 10, 100, 260);
@@ -98,7 +106,8 @@ public class WindowApplication extends JFrame
         greenUp.setBounds(170, 140, 65, 25);
         blueDown.setBounds(110, 165, 65, 25);
         blueUp.setBounds(170, 165, 65, 25);
-
+        save.setBounds(5, 245, 120, 25);
+        reset.setBounds(115, 245, 120, 25);
 
 		setVisible(true);
     }
@@ -152,7 +161,7 @@ public class WindowApplication extends JFrame
                         setTitle("Color Sampler");
                         modifiedColor = null;
                     }
-                    
+
                     int i = listColors.getSelectedIndex();
                     MyColor chosenColor = (MyColor) listColors.getSelectedValue();
                     colorDrawn.paintColor = new Color(chosenColor.red, chosenColor.green, chosenColor.blue);
@@ -181,8 +190,7 @@ public class WindowApplication extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
             /* rename window */
-
-
+            
             if (modifiedColor == null) {
                 setTitle("Color Sampler*");
                 modifiedColor = new MyColor(currentColor);
@@ -203,7 +211,6 @@ public class WindowApplication extends JFrame
                 }
 			}
 			else if ( e.getSource() == redDown ) {
-                // System.out.print("You pressed the Cancel button.");
                 int currentValue = Integer.parseInt(tfRed.getText());
                 int requestedValue = currentValue-5;
                 if (inRange(requestedValue)) {
@@ -213,7 +220,6 @@ public class WindowApplication extends JFrame
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == greenUp ) {
-                // System.out.print("You pressed the Cancel button.");
                 int currentValue = Integer.parseInt(tfGreen.getText());
                 int requestedValue = currentValue+5;
                 if (inRange(requestedValue)) {
@@ -223,7 +229,6 @@ public class WindowApplication extends JFrame
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == greenDown ) {
-                // System.out.print("You pressed the Cancel button.");
                 int currentValue = Integer.parseInt(tfGreen.getText());
                 int requestedValue = currentValue-5;
                 if (inRange(requestedValue)) {
@@ -233,7 +238,6 @@ public class WindowApplication extends JFrame
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == blueUp ) {
-                // System.out.print("You pressed the Cancel button.");
                 int currentValue = Integer.parseInt(tfBlue.getText());
                 int requestedValue = currentValue+5;
                 if (inRange(requestedValue)) {
@@ -243,7 +247,6 @@ public class WindowApplication extends JFrame
                     colorDrawn.repaint();
                 }
             } else if ( e.getSource() == blueDown ) {
-                // System.out.print("You pressed the Cancel button.");
                 int currentValue = Integer.parseInt(tfBlue.getText());
                 int requestedValue = currentValue-5;
                 if (inRange(requestedValue)) {
@@ -252,6 +255,21 @@ public class WindowApplication extends JFrame
                     colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
                     colorDrawn.repaint();
                 }
+            } else if ( e.getSource() == save ) {
+                System.out.println("*save");
+                currentColor.red = modifiedColor.red;
+                currentColor.green = modifiedColor.green;
+                currentColor.blue = modifiedColor.blue;
+                // System.out.println(colors.indexOf(currentColor));
+            } else if ( e.getSource() == reset ) {
+                System.out.println("*reset");
+                modifiedColor = null;
+                modifiedColor = new MyColor(currentColor); // reset to current color
+                colorDrawn.paintColor = new Color(modifiedColor.red, modifiedColor.green, modifiedColor.blue);
+                colorDrawn.repaint();
+                tfRed.setText(Integer.toString(modifiedColor.red));
+                tfGreen.setText(Integer.toString(modifiedColor.green));
+                tfBlue.setText(Integer.toString(modifiedColor.blue));
             }
 
 		}
