@@ -190,7 +190,7 @@ public class WindowApplication extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
             /* rename window */
-            
+
             if (modifiedColor == null) {
                 setTitle("Color Sampler*");
                 modifiedColor = new MyColor(currentColor);
@@ -260,7 +260,6 @@ public class WindowApplication extends JFrame
                 currentColor.red = modifiedColor.red;
                 currentColor.green = modifiedColor.green;
                 currentColor.blue = modifiedColor.blue;
-                // System.out.println(colors.indexOf(currentColor));
             } else if ( e.getSource() == reset ) {
                 System.out.println("*reset");
                 modifiedColor = null;
@@ -275,10 +274,37 @@ public class WindowApplication extends JFrame
 		}
 	}
 
+    public void writeFile(String filename) throws IOException
+    {
+        FileOutputStream ostream = new FileOutputStream(filename);
+        PrintWriter writer = new PrintWriter(ostream);
+
+        int i = 0;
+        while (i < colorCount)
+        {
+            MyColor thisColor = colors[i];
+            writer.println(thisColor.name + " " + thisColor.red + " " + thisColor.green + " " + thisColor.blue);
+
+            i++;
+        }
+
+        writer.flush();
+		ostream.close();
+    }
+
 	private class WindowDestroyer extends WindowAdapter
 	{
 		public void windowClosing(WindowEvent e)
 		{
+            /* save the file */
+
+            try {
+                writeFile("output.txt");
+            } catch (IOException io) {
+                System.out.println("Failed to save: " + io);
+            }
+
+
 			System.exit(0);
 		}
 	}
